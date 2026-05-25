@@ -4,6 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>저희 결혼합니다 · 종민 ♡ 수연</title>
+
+<!-- 검색엔진 노출 차단 (선택) -->
+<meta name="robots" content="noindex, nofollow">
+
+<!-- ============================================================
+     Open Graph (카카오톡/페이스북/슬랙 등 링크 미리보기)
+     ❗ SITE_URL 자리에 실제 배포 도메인을 채워넣으세요.
+        예) https://wonjjong.github.io/wedding/
+     변경 후 카카오톡은 캐시가 강해서
+       https://developers.kakao.com/tool/debugger/sharing
+     에서 URL 재검증해야 새 썸네일이 보입니다.
+     ============================================================ -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="원종민❤️ 최수연 결혼합니다.">
+<meta property="og:description" content="2026년 10월 9일 금요일 오후 1시 40분">
+<meta property="og:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:alt" content="원종민 최수연 결혼식">
+<meta property="og:url" content="https://wonjjong.github.io/wedding/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="원종민 ♡ 최수연 모바일 청첩장">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="원종민❤️ 최수연 결혼합니다.">
+<meta name="twitter:description" content="2026년 10월 9일 금요일 오후 1시 40분">
+<meta name="twitter:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -460,23 +488,29 @@
     margin-bottom: 20px;
   }
   .map {
-    height: 200px;
-    background:
-      linear-gradient(0deg, rgba(0,0,0,0.05), rgba(0,0,0,0.05)),
-      repeating-linear-gradient(45deg, #e8e2d8 0 8px, #f0ebe1 8px 16px);
+    height: 240px;
     border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: #efe9df;
     position: relative;
+  }
+  .map .map-fallback {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--sub);
     font-size: 12px;
     letter-spacing: 0.2em;
-    margin-bottom: 16px;
+    background:
+      linear-gradient(0deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04)),
+      repeating-linear-gradient(45deg, #e8e2d8 0 8px, #f0ebe1 8px 16px);
   }
-  .map::before {
+  .map .map-fallback::before {
     content: '📍';
-    font-size: 28px;
+    font-size: 22px;
     margin-right: 8px;
   }
   .nav-buttons {
@@ -721,7 +755,7 @@
     <div class="hero-content">
       <div class="names">원종민<span class="heart">♡</span>최수연</div>
       <div class="date-md">10.09</div>
-      <div class="date-sub">FRI PM 1:30</div>
+      <div class="date-sub">FRI PM 1:40</div>
       <div class="venue">루이비스 강서</div>
     </div>
     <div class="scroll">SCROLL</div>
@@ -744,7 +778,7 @@
   <section>
     <div class="section-tag reveal">OUR DAY</div>
     <h2 class="section-title reveal delay-1">2026년 10월 9일 금요일</h2>
-    <div class="cal-big serif reveal delay-2">오후 한 시 삼십 분</div>
+    <div class="cal-big serif reveal delay-2">오후 한 시 사십 분</div>
     <table class="calendar reveal delay-3">
       <thead>
         <tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr>
@@ -803,14 +837,8 @@
     <h2 class="section-title reveal delay-1">예식 안내</h2>
     <div class="schedule">
       <div class="card reveal delay-2">
-        <div class="label">PART 1</div>
         <div class="name serif">본식 · 1층 예식홀</div>
-        <div class="meta"><b>13:30 – 14:00</b><br>가족, 친지, 지인분들과 함께하는 결혼 서약</div>
-      </div>
-      <div class="card reveal delay-3">
-        <div class="label">PART 2</div>
-        <div class="name serif">애프터 파티 · 옥상 가든</div>
-        <div class="meta"><b>14:30 – 16:00</b><br>가벼운 식사와 음악, 자유로운 축하 인사</div>
+        <div class="meta"><b>13:40 – 14:50</b> (70분)<br>가족, 친지, 지인분들과 함께하는 결혼 서약</div>
       </div>
     </div>
   </section>
@@ -821,7 +849,9 @@
     <h2 class="section-title reveal delay-1">오시는 길</h2>
     <div class="place serif reveal delay-2">루이비스 강서</div>
     <div class="addr reveal delay-2">서울특별시 강서구 · 문의 02-0000-0000</div>
-    <div class="map reveal delay-3">MAP PREVIEW</div>
+    <div class="map reveal delay-3" id="kakao-map">
+      <div class="map-fallback">지도를 불러오는 중…</div>
+    </div>
     <div class="nav-buttons reveal delay-4">
       <a href="https://map.naver.com/p/search/루이비스컨벤션 강서점" target="_blank" rel="noopener">네이버지도</a>
       <a href="https://map.kakao.com/?sName=&eName=루이비스컨벤션 강서점" target="_blank" rel="noopener">카카오맵 길찾기</a>
@@ -919,9 +949,20 @@
 
 </main>
 
+<!-- ============================================================
+     Kakao Maps SDK
+     ❗ KAKAO_JS_KEY 자리에 본인 JavaScript 키 붙여넣기.
+     발급: https://developers.kakao.com/console/app → 앱 추가 →
+           제품 설정 → 카카오맵 ON →
+           플랫폼 → Web 플랫폼 등록 → 도메인 추가
+           (개발: http://localhost:8080, 배포: https://wonjjong.github.io)
+     키가 비어있거나 잘못되면 자동으로 fallback 문구가 표시됨.
+     ============================================================ -->
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=KAKAO_JS_KEY&libraries=services&autoload=false"></script>
+
 <script>
-  // Countdown to 2026-10-09 13:30 KST
-  const target = new Date('2026-10-09T13:30:00+09:00').getTime();
+  // Countdown to 2026-10-09 13:40 KST
+  const target = new Date('2026-10-09T13:40:00+09:00').getTime();
   const elD = document.getElementById('cd-d');
   const elH = document.getElementById('cd-h');
   const elM = document.getElementById('cd-m');
@@ -1098,6 +1139,42 @@
   };
 
   renderComments();
+
+  // Kakao Map 초기화
+  (function initKakaoMap(){
+    const container = document.getElementById('kakao-map');
+    if (!container) return;
+    if (typeof kakao === 'undefined' || !kakao.maps) {
+      // SDK 미로드 (키 누락/네트워크 실패 등) — fallback 유지
+      return;
+    }
+    kakao.maps.load(function(){
+      // fallback 제거
+      const fb = container.querySelector('.map-fallback');
+      if (fb) fb.remove();
+      // 임시 중심: 강서구 양천로 인근
+      const fallbackCenter = new kakao.maps.LatLng(37.5612, 126.8569);
+      const map = new kakao.maps.Map(container, {
+        center: fallbackCenter,
+        level: 4,
+        draggable: true,
+      });
+      // 주소 → 좌표
+      const geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch('서울 강서구 양천로 476', function(result, status){
+        const place = (status === kakao.maps.services.Status.OK && result[0])
+          ? new kakao.maps.LatLng(result[0].y, result[0].x)
+          : fallbackCenter;
+        new kakao.maps.Marker({ map, position: place });
+        const info = new kakao.maps.InfoWindow({
+          content: '<div style="padding:6px 10px;font-size:12px;font-family:Noto Sans KR,sans-serif;white-space:nowrap;">루이비스 강서</div>',
+          removable: false,
+        });
+        info.open(map, new kakao.maps.Marker({ position: place })); // 마커 위 라벨
+        map.setCenter(place);
+      });
+    });
+  })();
 
   // T-Map opener (mobile app scheme; falls back to Tmap web search)
   function openTmap(e){
