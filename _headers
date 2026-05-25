@@ -1,0 +1,6 @@
+# Cloudflare Pages 사용 시에만 유효. GitHub Pages에서는 무시됨.
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  Cache-Control: public, max-age=600
