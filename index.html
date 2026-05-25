@@ -417,20 +417,36 @@
   .lightbox .close {
     position: absolute;
     top: 18px; right: 22px;
-    background: none; border: none;
-    color: #fff; font-size: 28px; cursor: pointer;
+    background: rgba(0,0,0,0.35);
+    border: none;
+    color: #fff; font-size: 26px; line-height: 1;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1002;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   .lightbox .nav {
     position: absolute;
     top: 50%; transform: translateY(-50%);
-    background: rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.35);
     border: none; color: #fff;
-    width: 44px; height: 44px;
+    width: 56px; height: 56px;
     border-radius: 50%;
-    font-size: 20px; cursor: pointer;
+    font-size: 26px; line-height: 1;
+    cursor: pointer;
+    z-index: 1002;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
-  .lightbox .nav.prev { left: 16px; }
-  .lightbox .nav.next { right: 16px; }
+  .lightbox .nav.prev { left: 12px; }
+  .lightbox .nav.next { right: 12px; }
+  .lightbox .nav:active { background: rgba(0,0,0,0.55); }
   .lightbox .counter {
     position: absolute;
     bottom: 22px; left: 0; right: 0;
@@ -1223,9 +1239,33 @@
     setLbImage(lbIndex);
   }
   galleryImgs.forEach((img, i) => img.parentElement.addEventListener('click', () => openLightbox(i)));
-  document.getElementById('lightbox').addEventListener('click', (e) => {
+  const lbEl = document.getElementById('lightbox');
+  lbEl.addEventListener('click', (e) => {
     if (e.target.id === 'lightbox') closeLightbox();
   });
+
+  // 키보드: ← → ESC
+  document.addEventListener('keydown', (e) => {
+    if (!lbEl.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft')  navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+    if (e.key === 'Escape')     closeLightbox();
+  });
+
+  // 모바일 스와이프
+  let touchStartX = 0, touchStartY = 0, touchMoved = false;
+  lbEl.addEventListener('touchstart', (e) => {
+    const t = e.changedTouches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY; touchMoved = false;
+  }, { passive: true });
+  lbEl.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      navLightbox(dx > 0 ? -1 : 1);
+    }
+  }, { passive: true });
 
   // Scroll-triggered reveal (root = device frame, since it owns the scroll)
   const deviceEl = document.querySelector('.device');
