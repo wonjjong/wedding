@@ -529,6 +529,23 @@
     font-size: 22px;
     margin-right: 8px;
   }
+  /* Leaflet 커스텀 */
+  .leaflet-control-attribution {
+    font-size: 10px !important;
+    background: rgba(255,255,255,0.7) !important;
+  }
+  .venue-tooltip {
+    background: var(--accent) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 4px 10px !important;
+    font-family: 'Nanum Myeongjo', serif !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  }
+  .venue-tooltip::before { border-top-color: var(--accent) !important; }
   .nav-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -965,16 +982,9 @@
 
 </main>
 
-<!-- ============================================================
-     Kakao Maps SDK
-     ❗ KAKAO_JS_KEY 자리에 본인 JavaScript 키 붙여넣기.
-     발급: https://developers.kakao.com/console/app → 앱 추가 →
-           제품 설정 → 카카오맵 ON →
-           플랫폼 → Web 플랫폼 등록 → 도메인 추가
-           (개발: http://localhost:8080, 배포: https://wonjjong.github.io)
-     키가 비어있거나 잘못되면 자동으로 fallback 문구가 표시됨.
-     ============================================================ -->
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=KAKAO_JS_KEY&libraries=services&autoload=false"></script>
+<!-- Leaflet + OpenStreetMap (키 불필요, 완전 무료) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
   // Countdown to 2026-10-09 13:40 KST
@@ -1156,40 +1166,38 @@
 
   renderComments();
 
-  // Kakao Map 초기화
-  (function initKakaoMap(){
+  // Leaflet + OSM 지도
+  (function initLeafletMap(){
     const container = document.getElementById('kakao-map');
-    if (!container) return;
-    if (typeof kakao === 'undefined' || !kakao.maps) {
-      // SDK 미로드 (키 누락/네트워크 실패 등) — fallback 유지
-      return;
-    }
-    kakao.maps.load(function(){
-      // fallback 제거
-      const fb = container.querySelector('.map-fallback');
-      if (fb) fb.remove();
-      // 임시 중심: 강서구 양천로 인근
-      const fallbackCenter = new kakao.maps.LatLng(37.5612, 126.8569);
-      const map = new kakao.maps.Map(container, {
-        center: fallbackCenter,
-        level: 4,
-        draggable: true,
-      });
-      // 주소 → 좌표
-      const geocoder = new kakao.maps.services.Geocoder();
-      geocoder.addressSearch('서울 강서구 양천로 476', function(result, status){
-        const place = (status === kakao.maps.services.Status.OK && result[0])
-          ? new kakao.maps.LatLng(result[0].y, result[0].x)
-          : fallbackCenter;
-        new kakao.maps.Marker({ map, position: place });
-        const info = new kakao.maps.InfoWindow({
-          content: '<div style="padding:6px 10px;font-size:12px;font-family:Noto Sans KR,sans-serif;white-space:nowrap;">루이비스 강서</div>',
-          removable: false,
-        });
-        info.open(map, new kakao.maps.Marker({ position: place })); // 마커 위 라벨
-        map.setCenter(place);
-      });
+    if (!container || typeof L === 'undefined') return;
+
+    // 루이비스 강서 좌표 (양천로 476, 가양역 9번출구 인근)
+    const LAT = 37.5697;
+    const LNG = 126.8623;
+
+    // fallback 제거
+    const fb = container.querySelector('.map-fallback');
+    if (fb) fb.remove();
+
+    const map = L.map(container, {
+      center: [LAT, LNG],
+      zoom: 17,
+      scrollWheelZoom: false,
+      attributionControl: true,
     });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    const marker = L.marker([LAT, LNG]).addTo(map);
+    marker.bindTooltip('루이비스 강서', {
+      permanent: true,
+      direction: 'top',
+      offset: [-15, -10],
+      className: 'venue-tooltip'
+    }).openTooltip();
   })();
 
   // T-Map opener (mobile app scheme; falls back to Tmap web search)
