@@ -52,9 +52,9 @@ a {
 
 .cover-section {
   position: relative;
-  height: 70vh;
-  min-height: 520px;
-  max-height: 640px;
+  height: calc(70vh + 20px);
+  min-height: 540px;
+  max-height: 660px;
   color: #fff;
   overflow: hidden;
 }
