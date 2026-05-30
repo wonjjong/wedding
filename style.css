@@ -173,7 +173,6 @@ a {
   position: relative;
   padding: 64px 12px;
   text-align: center;
-  border-top: 1px solid var(--line);
 }
 
 .section::before {
@@ -214,6 +213,10 @@ a {
 
 .intro {
   background: var(--paper);
+}
+
+.intro::before {
+  display: none;
 }
 
 .couple-section {
@@ -442,7 +445,7 @@ a {
 .map-card {
   display: block;
   height: 200px;
-  margin-bottom: 18px;
+  margin-bottom: 40px;
   border-radius: 18px;
   background:
     linear-gradient(135deg, rgba(51,41,35,0.06), rgba(169,129,104,0.18)),
@@ -500,7 +503,7 @@ a {
 }
 
 .location-detail {
-  margin-bottom: 22px;
+  margin-bottom: 40px;
 }
 
 .location-detail h3 {
@@ -525,12 +528,47 @@ a {
   gap: 12px;
 }
 
-.map-buttons a {
+.map-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 11px 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--brown);
+  text-decoration: none;
   font-size: 13px;
-  padding: 12px 6px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
 }
 
-.map-buttons a,
+.map-btn-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.map-btn .map-btn-badge {
+  background: transparent;
+  color: var(--brown);
+  border: 1px solid var(--line);
+}
+
+.map-btn:active {
+  background: var(--paper-deep);
+}
+
 .contact-grid a,
 .share-button,
 .guestbook-form button {
@@ -547,7 +585,6 @@ a {
   cursor: pointer;
 }
 
-.map-buttons a:nth-child(2),
 .contact-grid a {
   background: transparent;
   color: var(--brown);

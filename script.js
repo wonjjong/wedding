@@ -136,7 +136,7 @@ imageModal.addEventListener("touchend", (e) => {
   const moreBtn = document.getElementById("galleryMore");
   if (!grid) return;
 
-  const INITIAL = 10;
+  const INITIAL = 12;
 
   function makeItem(name, i) {
     const src = "./images/wedding-webp/" + encodeURI(name);
