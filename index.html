@@ -18,14 +18,15 @@
   <meta name="twitter:description" content="2026년 10월 9일, 소중한 분들을 초대합니다." />
   <meta name="twitter:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg" />
   <title>원종민 그리고 최수연, 결혼합니다</title>
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/innks/NanumSquareNeo/nanumsquareneo.css" />
-  <link rel="stylesheet" href="./style.css?v=2" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%99%A5%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css" />
+  <link rel="stylesheet" href="./style.css?v=6" />
 </head>
 <body>
   <main class="invitation">
     <section class="cover-section">
       <div class="cover-image-wrap">
-        <img src="./images/main.jpeg" alt="웨딩 대표 이미지" class="cover-image" />
+        <img src="./images/main.webp" alt="웨딩 대표 이미지" class="cover-image" />
         <div class="cover-dim"></div>
       </div>
 
@@ -127,50 +128,8 @@
       <p class="section-kicker">Gallery</p>
       <h2>우리의 순간</h2>
 
-      <div class="gallery">
-        <button class="gallery-photo" data-image="./images/gallery/01.webp">
-          <img src="./images/gallery/01.webp" alt="갤러리 사진 1" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/02.webp">
-          <img src="./images/gallery/02.webp" alt="갤러리 사진 2" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/03.webp">
-          <img src="./images/gallery/03.webp" alt="갤러리 사진 3" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/04.webp">
-          <img src="./images/gallery/04.webp" alt="갤러리 사진 4" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/05.webp">
-          <img src="./images/gallery/05.webp" alt="갤러리 사진 5" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/06.webp">
-          <img src="./images/gallery/06.webp" alt="갤러리 사진 6" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/07.webp">
-          <img src="./images/gallery/07.webp" alt="갤러리 사진 7" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/08.webp">
-          <img src="./images/gallery/08.webp" alt="갤러리 사진 8" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/09.webp">
-          <img src="./images/gallery/09.webp" alt="갤러리 사진 9" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/10.webp">
-          <img src="./images/gallery/10.webp" alt="갤러리 사진 10" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/11.webp">
-          <img src="./images/gallery/11.webp" alt="갤러리 사진 11" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/12.webp">
-          <img src="./images/gallery/12.webp" alt="갤러리 사진 12" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/13.webp">
-          <img src="./images/gallery/13.webp" alt="갤러리 사진 13" loading="lazy" />
-        </button>
-        <button class="gallery-photo" data-image="./images/gallery/14.webp">
-          <img src="./images/gallery/14.webp" alt="갤러리 사진 14" loading="lazy" />
-        </button>
-      </div>
+      <div class="gallery" id="galleryGrid"></div>
+      <button type="button" class="gallery-more" id="galleryMore">더 보기</button>
     </section>
 
     <section id="location" class="section location-section reveal">
@@ -274,9 +233,9 @@
     </footer>
   </main>
 
-  <audio id="bgm" loop preload="auto" src="./audio/bgm.mp3"></audio>
+  <audio id="bgm" loop preload="none" data-src="./audio/bgm.mp3"></audio>
 
-  <button type="button" class="bgm-toggle" id="bgmToggle" aria-label="배경음악 토글">
+  <button type="button" class="bgm-toggle" id="bgmToggle" aria-label="배경음악 토글" hidden>
     <span class="bgm-icon" id="bgmIcon">♪</span>
   </button>
 
@@ -284,9 +243,12 @@
 
   <div class="image-modal" id="imageModal" aria-hidden="true">
     <button type="button" id="modalClose" class="modal-close">닫기</button>
+    <button type="button" id="modalPrev" class="modal-nav prev" aria-label="이전">‹</button>
     <img src="" alt="확대 이미지" id="modalImage" />
+    <button type="button" id="modalNext" class="modal-nav next" aria-label="다음">›</button>
+    <div class="modal-counter" id="modalCounter"></div>
   </div>
 
-  <script src="./script.js?v=2"></script>
+  <script src="./script.js?v=11"></script>
 </body>
 </html>

@@ -68,8 +68,6 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.02);
-  animation: coverZoom 8s ease forwards;
 }
 
 .cover-dim {
@@ -422,6 +420,25 @@ a {
   transform: scale(1.04);
 }
 
+.gallery-more {
+  display: block;
+  margin: 18px auto 0;
+  padding: 11px 28px;
+  border: 1px solid var(--brown);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.gallery-more:active {
+  background: var(--brown);
+  color: #fffaf6;
+}
+
 .map-card {
   display: block;
   height: 200px;
@@ -767,10 +784,16 @@ a {
 }
 
 .image-modal img {
-  max-width: min(100%, 430px);
-  max-height: 82vh;
-  border-radius: 24px;
+  max-width: 96vw;
+  max-height: 92vh;
+  border-radius: 14px;
   object-fit: contain;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.image-modal img.swapping {
+  opacity: 0;
+  transform: scale(0.97);
 }
 
 .modal-close {
@@ -783,6 +806,41 @@ a {
   background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
+}
+
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 51;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-nav.prev { left: 14px; }
+.modal-nav.next { right: 14px; }
+.modal-nav:active { background: rgba(255,255,255,0.24); }
+
+.modal-counter {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: rgba(255,255,255,0.75);
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.2em;
+  font-size: 13px;
 }
 
 @keyframes coverZoom {

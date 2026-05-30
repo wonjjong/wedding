@@ -61,13 +61,121 @@ const imageModal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 const modalClose = document.getElementById("modalClose");
 
-document.querySelectorAll(".gallery-photo").forEach((button) => {
-  button.addEventListener("click", () => {
-    modalImage.src = button.dataset.image;
-    imageModal.classList.add("open");
-    imageModal.setAttribute("aria-hidden", "false");
-  });
+const GALLERY_PHOTOS = [
+  "0.webp", "1.webp", "2.webp", "3.webp",
+  "3-1.webp", "3-1-1.webp", "3-1-1-1.webp",
+  "4.webp", "5.webp", "6.webp", "7.webp", "8.webp", "9.webp",
+  "10.webp", "11.webp", "12.webp", "13.webp", "14.webp",
+  "15.webp", "16.webp", "17.webp", "18.webp", "19.webp", "20.webp",
+  "21.webp", "22.webp", "23.webp", "24.webp", "25.webp", "26.webp",
+  "27.webp",
+];
+
+let lbIndex = 0;
+const modalCounter = document.getElementById("modalCounter");
+const modalPrev = document.getElementById("modalPrev");
+const modalNext = document.getElementById("modalNext");
+
+function srcAt(i) {
+  return "./images/wedding-webp/" + encodeURI(GALLERY_PHOTOS[i]);
+}
+
+function setModalImage(i) {
+  lbIndex = (i + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length;
+  modalImage.classList.add("swapping");
+  setTimeout(() => {
+    modalImage.src = srcAt(lbIndex);
+    if (modalCounter) {
+      modalCounter.textContent =
+        String(lbIndex + 1).padStart(2, "0") + " / " +
+        String(GALLERY_PHOTOS.length).padStart(2, "0");
+    }
+    requestAnimationFrame(() => modalImage.classList.remove("swapping"));
+  }, 140);
+}
+
+function openModalAt(i) {
+  lbIndex = i;
+  modalImage.src = srcAt(i);
+  if (modalCounter) {
+    modalCounter.textContent =
+      String(i + 1).padStart(2, "0") + " / " +
+      String(GALLERY_PHOTOS.length).padStart(2, "0");
+  }
+  imageModal.classList.add("open");
+  imageModal.setAttribute("aria-hidden", "false");
+}
+
+function navModal(d) { setModalImage(lbIndex + d); }
+
+if (modalPrev) modalPrev.addEventListener("click", (e) => { e.stopPropagation(); navModal(-1); });
+if (modalNext) modalNext.addEventListener("click", (e) => { e.stopPropagation(); navModal(1); });
+
+document.addEventListener("keydown", (event) => {
+  if (!imageModal.classList.contains("open")) return;
+  if (event.key === "ArrowLeft")  navModal(-1);
+  if (event.key === "ArrowRight") navModal(1);
 });
+
+let touchStartX = 0, touchStartY = 0;
+imageModal.addEventListener("touchstart", (e) => {
+  const t = e.changedTouches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY;
+}, { passive: true });
+imageModal.addEventListener("touchend", (e) => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+    navModal(dx > 0 ? -1 : 1);
+  }
+}, { passive: true });
+
+(function buildGallery() {
+  const grid = document.getElementById("galleryGrid");
+  const moreBtn = document.getElementById("galleryMore");
+  if (!grid) return;
+
+  const INITIAL = 10;
+
+  function makeItem(name, i) {
+    const src = "./images/wedding-webp/" + encodeURI(name);
+    const btn = document.createElement("button");
+    btn.className = "gallery-photo";
+    btn.type = "button";
+    btn.dataset.image = src;
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "갤러리 사진 " + (i + 1);
+    img.loading = "lazy";
+    img.decoding = "async";
+    btn.appendChild(img);
+    btn.addEventListener("click", () => openModalAt(i));
+    return btn;
+  }
+
+  function appendRange(from, to) {
+    const frag = document.createDocumentFragment();
+    for (let i = from; i < to && i < GALLERY_PHOTOS.length; i++) {
+      frag.appendChild(makeItem(GALLERY_PHOTOS[i], i));
+    }
+    grid.appendChild(frag);
+  }
+
+  appendRange(0, INITIAL);
+
+  if (moreBtn) {
+    if (GALLERY_PHOTOS.length <= INITIAL) {
+      moreBtn.style.display = "none";
+    } else {
+      moreBtn.textContent = `더 보기 (+${GALLERY_PHOTOS.length - INITIAL})`;
+      moreBtn.addEventListener("click", () => {
+        appendRange(INITIAL, GALLERY_PHOTOS.length);
+        moreBtn.style.display = "none";
+      }, { once: true });
+    }
+  }
+})();
 
 function closeModal() {
   imageModal.classList.remove("open");
@@ -197,39 +305,51 @@ window.openTmap = openTmap;
   const icon = document.getElementById("bgmIcon");
   if (!audio || !btn) return;
 
-  audio.volume = 0.5;
+  const src = audio.dataset.src;
+  if (!src) return;
 
-  function setPlayingUI(playing) {
-    btn.classList.toggle("playing", playing);
-    btn.classList.toggle("muted", !playing);
-    icon.textContent = playing ? "♪" : "♪̸";
-    btn.setAttribute("aria-label", playing ? "배경음악 끄기" : "배경음악 켜기");
+  fetch(src, { method: "HEAD" }).then((r) => {
+    if (!r.ok) return;
+    setup();
+  }).catch(() => {});
+
+  function setup() {
+    audio.src = src;
+    audio.volume = 0.5;
+    btn.hidden = false;
+
+    function setPlayingUI(playing) {
+      btn.classList.toggle("playing", playing);
+      btn.classList.toggle("muted", !playing);
+      icon.textContent = playing ? "♪" : "♪̸";
+      btn.setAttribute("aria-label", playing ? "배경음악 끄기" : "배경음악 켜기");
+    }
+
+    function tryPlay() {
+      return audio.play().then(
+        () => setPlayingUI(true),
+        () => setPlayingUI(false)
+      );
+    }
+
+    tryPlay();
+
+    function autoStartOnce() {
+      if (audio.paused) tryPlay();
+      window.removeEventListener("pointerdown", autoStartOnce);
+      window.removeEventListener("touchstart", autoStartOnce);
+      window.removeEventListener("keydown", autoStartOnce);
+    }
+    window.addEventListener("pointerdown", autoStartOnce, { once: true });
+    window.addEventListener("touchstart", autoStartOnce, { once: true });
+    window.addEventListener("keydown", autoStartOnce, { once: true });
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (audio.paused) tryPlay();
+      else { audio.pause(); setPlayingUI(false); }
+    });
+
+    setPlayingUI(false);
   }
-
-  function tryPlay() {
-    return audio.play().then(
-      () => setPlayingUI(true),
-      () => setPlayingUI(false)
-    );
-  }
-
-  tryPlay();
-
-  function autoStartOnce() {
-    if (audio.paused) tryPlay();
-    window.removeEventListener("pointerdown", autoStartOnce);
-    window.removeEventListener("touchstart", autoStartOnce);
-    window.removeEventListener("keydown", autoStartOnce);
-  }
-  window.addEventListener("pointerdown", autoStartOnce, { once: true });
-  window.addEventListener("touchstart", autoStartOnce, { once: true });
-  window.addEventListener("keydown", autoStartOnce, { once: true });
-
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (audio.paused) tryPlay();
-    else { audio.pause(); setPlayingUI(false); }
-  });
-
-  setPlayingUI(false);
 })();
