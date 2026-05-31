@@ -82,16 +82,21 @@ function srcAt(i) {
 
 function setModalImage(i) {
   lbIndex = (i + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length;
+  const nextSrc = srcAt(lbIndex);
+  const pre = new Image();
+  pre.src = nextSrc;
   modalImage.classList.add("swapping");
-  setTimeout(() => {
-    modalImage.src = srcAt(lbIndex);
+  const swap = () => {
+    modalImage.src = nextSrc;
     if (modalCounter) {
       modalCounter.textContent =
         String(lbIndex + 1).padStart(2, "0") + " / " +
         String(GALLERY_PHOTOS.length).padStart(2, "0");
     }
     requestAnimationFrame(() => modalImage.classList.remove("swapping"));
-  }, 140);
+  };
+  if (pre.complete) setTimeout(swap, 100);
+  else { pre.onload = () => setTimeout(swap, 100); setTimeout(swap, 260); }
 }
 
 function openModalAt(i) {
