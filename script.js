@@ -58,7 +58,7 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
 const imageModal = document.getElementById("imageModal");
-const modalImage = document.getElementById("modalImage");
+let modalImage = document.getElementById("modalImage");
 const modalClose = document.getElementById("modalClose");
 
 const GALLERY_PHOTOS = [
@@ -80,24 +80,51 @@ function srcAt(i) {
   return "./images/wedding-webp/" + encodeURI(GALLERY_PHOTOS[i]);
 }
 
-function setModalImage(i) {
+const _imgCache = {};
+function preload(src) {
+  if (_imgCache[src]) return _imgCache[src];
+  const img = new Image();
+  img.src = src;
+  _imgCache[src] = img;
+  return img;
+}
+
+async function setModalImage(i) {
   lbIndex = (i + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length;
   const nextSrc = srcAt(lbIndex);
-  const pre = new Image();
-  pre.src = nextSrc;
+  const myToken = ++setModalImage._token;
+
+  preload(nextSrc);
+
   modalImage.classList.add("swapping");
-  const swap = () => {
-    modalImage.src = nextSrc;
-    if (modalCounter) {
-      modalCounter.textContent =
-        String(lbIndex + 1).padStart(2, "0") + " / " +
-        String(GALLERY_PHOTOS.length).padStart(2, "0");
-    }
-    requestAnimationFrame(() => modalImage.classList.remove("swapping"));
-  };
-  if (pre.complete) setTimeout(swap, 100);
-  else { pre.onload = () => setTimeout(swap, 100); setTimeout(swap, 260); }
+
+  // Wait for the fade-out to finish (CSS 0.16s) before swapping src.
+  await new Promise((r) => setTimeout(r, 180));
+  if (myToken !== setModalImage._token) return;
+
+  // Replace the <img> element entirely — avoids iOS Safari's stale
+  // composite layer from the previous src.
+  const fresh = modalImage.cloneNode(false);
+  fresh.removeAttribute("src");
+  fresh.classList.add("swapping");
+  modalImage.replaceWith(fresh);
+  modalImage = fresh;
+
+  modalImage.src = nextSrc;
+  if (modalCounter) {
+    modalCounter.textContent =
+      String(lbIndex + 1).padStart(2, "0") + " / " +
+      String(GALLERY_PHOTOS.length).padStart(2, "0");
+  }
+
+  try { await modalImage.decode(); } catch {}
+  if (myToken !== setModalImage._token) return;
+
+  requestAnimationFrame(() => {
+    if (myToken === setModalImage._token) modalImage.classList.remove("swapping");
+  });
 }
+setModalImage._token = 0;
 
 function openModalAt(i) {
   lbIndex = i;
@@ -209,69 +236,192 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeModal();
 });
 
+// ============================================================
+// 방명록: Google Apps Script Web App URL 을 GAS_URL 에 채워넣으면
+// 원격(스프레드시트) 저장으로 자동 전환. 비어 있으면 localStorage 폴백.
+// ============================================================
+const GAS_URL = "";
+
 const guestbookForm = document.getElementById("guestbookForm");
 const guestbookList = document.getElementById("guestbookList");
-const storageKey = "weddingGuestbookMessages";
 
-function getMessages() {
+const localStore = {
+  key: "weddingGuestbookMessages",
+  async list() {
+    try { return JSON.parse(localStorage.getItem(this.key) || "[]"); }
+    catch { return []; }
+  },
+  async add(item) {
+    const arr = await this.list();
+    arr.push(item);
+    localStorage.setItem(this.key, JSON.stringify(arr));
+  },
+  async remove(id) {
+    const arr = (await this.list()).filter((m) => String(m.id) !== String(id));
+    localStorage.setItem(this.key, JSON.stringify(arr));
+  },
+};
+
+const remoteStore = {
+  async list() {
+    const r = await fetch(GAS_URL + "?action=list", { cache: "no-store" });
+    return await r.json();
+  },
+  async add(item) {
+    await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "add", ...item }),
+    });
+  },
+  async remove(id, pwhash) {
+    await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "remove", id, pwhash }),
+    });
+  },
+};
+
+const guestStore = GAS_URL ? remoteStore : localStore;
+
+async function sha256(text) {
+  const buf = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function formatGbDate(ts) {
+  const d = new Date(Number(ts));
+  return (
+    d.getFullYear() + "." +
+    String(d.getMonth() + 1).padStart(2, "0") + "." +
+    String(d.getDate()).padStart(2, "0") + " " +
+    String(d.getHours()).padStart(2, "0") + ":" +
+    String(d.getMinutes()).padStart(2, "0")
+  );
+}
+
+async function renderMessages() {
+  guestbookList.innerHTML = '<div class="guestbook-message"><p>불러오는 중…</p></div>';
+  let messages;
   try {
-    return JSON.parse(localStorage.getItem(storageKey)) || [];
+    messages = await guestStore.list();
   } catch {
-    return [];
+    guestbookList.innerHTML = '<div class="guestbook-message"><p>방명록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</p></div>';
+    return;
   }
-}
-
-function saveMessages(messages) {
-  localStorage.setItem(storageKey, JSON.stringify(messages));
-}
-
-function renderMessages() {
-  const messages = getMessages();
   guestbookList.innerHTML = "";
 
-  if (messages.length === 0) {
+  if (!messages.length) {
     guestbookList.innerHTML = '<div class="guestbook-message"><strong>축하 메시지</strong><p>첫 번째 축하 메시지를 남겨보세요.</p></div>';
     return;
   }
 
-  messages.slice().reverse().forEach((message) => {
-    const item = document.createElement("div");
-    item.className = "guestbook-message";
+  messages
+    .slice()
+    .sort((a, b) => Number(b.ts || 0) - Number(a.ts || 0))
+    .forEach((m) => {
+      const item = document.createElement("div");
+      item.className = "guestbook-message";
+      item.dataset.id = m.id || "";
 
-    const name = document.createElement("strong");
-    name.textContent = message.name;
+      const top = document.createElement("div");
+      top.className = "gb-top";
 
-    const text = document.createElement("p");
-    text.textContent = message.text;
+      const name = document.createElement("strong");
+      name.textContent = m.name || "";
 
-    item.appendChild(name);
-    item.appendChild(text);
-    guestbookList.appendChild(item);
-  });
+      const dt = document.createElement("span");
+      dt.className = "gb-date";
+      dt.textContent = m.ts ? formatGbDate(m.ts) : "";
+
+      top.appendChild(name);
+      top.appendChild(dt);
+
+      const text = document.createElement("p");
+      text.textContent = m.message || m.text || "";
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "gb-del";
+      del.setAttribute("aria-label", "삭제");
+      del.textContent = "×";
+      del.addEventListener("click", () => deleteMessage(m));
+
+      item.appendChild(del);
+      item.appendChild(top);
+      item.appendChild(text);
+      guestbookList.appendChild(item);
+    });
 }
 
-guestbookForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+async function deleteMessage(m) {
+  if (!m || !m.id) return;
+  let pwhash = "";
+  if (m.pwhash) {
+    const pw = prompt("비밀번호를 입력하세요");
+    if (pw === null) return;
+    pwhash = await sha256(pw);
+    if (pwhash !== m.pwhash) {
+      showToast("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+  } else if (!confirm("이 메시지를 삭제할까요?")) {
+    return;
+  }
+  try {
+    await guestStore.remove(m.id, pwhash);
+    await renderMessages();
+    showToast("삭제되었습니다.");
+  } catch {
+    showToast("삭제에 실패했습니다.");
+  }
+}
 
+guestbookForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
   const nameInput = document.getElementById("guestName");
+  const pwInput = document.getElementById("guestPw");
   const messageInput = document.getElementById("guestMessage");
+  const submitBtn = event.target.querySelector('button[type="submit"]');
 
   const name = nameInput.value.trim();
-  const text = messageInput.value.trim();
+  const message = messageInput.value.trim();
+  const pw = pwInput ? pwInput.value : "";
 
-  if (!name || !text) {
+  if (!name || !message) {
     showToast("이름과 메시지를 입력해주세요.");
     return;
   }
 
-  const messages = getMessages();
-  messages.push({ name, text, createdAt: new Date().toISOString() });
-  saveMessages(messages.slice(-20));
+  submitBtn.disabled = true;
+  const orig = submitBtn.textContent;
+  submitBtn.textContent = "등록중…";
 
-  nameInput.value = "";
-  messageInput.value = "";
-  renderMessages();
-  showToast("메시지가 저장되었습니다.");
+  const item = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    ts: Date.now(),
+    name,
+    message,
+    pwhash: pw ? await sha256(pw) : "",
+  };
+
+  try {
+    await guestStore.add(item);
+    nameInput.value = "";
+    if (pwInput) pwInput.value = "";
+    messageInput.value = "";
+    await renderMessages();
+    showToast("메시지가 저장되었습니다.");
+  } catch {
+    showToast("저장에 실패했어요. 잠시 후 다시 시도해주세요.");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = orig;
+  }
 });
 
 renderMessages();

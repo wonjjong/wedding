@@ -699,25 +699,38 @@ a {
   margin-top: 22px;
 }
 
+.gb-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
 .guestbook-form input,
 .guestbook-form textarea {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 12px;
   background: transparent;
   color: var(--brown);
   outline: none;
 }
 
 .guestbook-form input {
-  height: 48px;
-  padding: 0 16px;
+  height: 44px;
+  padding: 0 14px;
+  font-size: 14px;
 }
 
 .guestbook-form textarea {
   min-height: 96px;
-  padding: 14px 16px;
+  padding: 12px 14px;
+  font-size: 14px;
   resize: vertical;
+}
+
+.guestbook-form input:focus,
+.guestbook-form textarea:focus {
+  border-color: var(--brown);
 }
 
 .guestbook-list {
@@ -728,22 +741,58 @@ a {
 }
 
 .guestbook-message {
-  padding: 15px 16px;
-  border-radius: 18px;
+  position: relative;
+  padding: 14px 16px;
+  border-radius: 12px;
   background: transparent;
   border: 1px solid var(--line);
 }
 
+.guestbook-message .gb-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
 .guestbook-message strong {
   display: block;
-  margin-bottom: 4px;
   font-size: 14px;
+  color: var(--brown);
+}
+
+.guestbook-message .gb-date {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  color: var(--brown-soft);
+  letter-spacing: 0.05em;
 }
 
 .guestbook-message p {
   margin: 0;
   font-size: 14px;
+  color: #4a4036;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
+
+.guestbook-message .gb-del {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--brown-soft);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.guestbook-message .gb-del:active { color: var(--brown); }
 
 .footer {
   padding: 0;
@@ -869,7 +918,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 22px;
-  background: rgba(28,22,18,0.9);
+  background: #1a1410;
 }
 
 .image-modal.open {
