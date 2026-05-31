@@ -8,36 +8,38 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="원종민 그리고 최수연, 결혼합니다" />
   <meta property="og:description" content="2026년 10월 9일, 소중한 분들을 초대합니다." />
-  <meta property="og:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg" />
+  <meta property="og:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg?v=2" />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="1200" />
+  <meta property="og:image:height" content="800" />
   <meta property="og:url" content="https://wonjjong.github.io/wedding/" />
   <meta property="og:locale" content="ko_KR" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="원종민 그리고 최수연, 결혼합니다" />
+  <meta name="twitter:title" content="종민 ❤️ 수연 결혼합니다" />
   <meta name="twitter:description" content="2026년 10월 9일, 소중한 분들을 초대합니다." />
-  <meta name="twitter:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg" />
-  <title>원종민 그리고 최수연, 결혼합니다</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%99%A5%3C/text%3E%3C/svg%3E" />
+  <meta name="twitter:image" content="https://wonjjong.github.io/wedding/images/og-image.jpg?v=2" />
+  <title>원종민 ❤️ 최수연 결혼합니다.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23332923'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='22' fill='%23f3f5f2'%3E%26amp;%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css" />
-  <link rel="stylesheet" href="./style.css?v=16" />
+  <link rel="stylesheet" href="./style.css?v=34" />
 </head>
 <body>
   <main class="invitation">
     <section class="cover-section">
       <div class="cover-image-wrap">
         <img src="./images/main.webp" alt="웨딩 대표 이미지" class="cover-image" />
-        <div class="cover-dim"></div>
+        <div class="cover-bottom-fade"></div>
       </div>
+
+      <button type="button" class="bgm-toggle" id="bgmToggle" aria-label="배경음악 토글" hidden>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </button>
 
       <div class="cover-copy">
         <p class="ko-name">원종민 그리고 최수연</p>
         <p class="cover-date">2026. 10. 09 FRI · 1:40 PM</p>
       </div>
 
-      <div class="scroll-guide">
-        <span></span>
-      </div>
+      <div class="bgm-notice" id="bgmNotice">♪ 배경음악이 준비되었습니다</div>
     </section>
 
     <nav class="floating-nav" aria-label="청첩장 빠른 이동">
@@ -104,24 +106,6 @@
         </div>
       </div>
 
-      <div class="d-day-box" id="ddayBox">
-        <div>
-          <strong id="dday">-</strong>
-          <span>DAYS</span>
-        </div>
-        <div>
-          <strong id="dhour">-</strong>
-          <span>HOURS</span>
-        </div>
-        <div>
-          <strong id="dminute">-</strong>
-          <span>MIN</span>
-        </div>
-        <div>
-          <strong id="dsecond">-</strong>
-          <span>SEC</span>
-        </div>
-      </div>
     </section>
 
     <section id="gallery" class="section gallery-section reveal">
@@ -136,18 +120,13 @@
       <p class="section-kicker">Location</p>
       <h2>오시는 길</h2>
 
-      <a class="map-card naver-map" id="map" href="https://map.naver.com/p/search/%EB%A3%A8%EC%9D%B4%EB%B9%84%EC%8A%A4%EC%BB%A8%EB%B2%A4%EC%85%98%20%EA%B0%95%EC%84%9C%EC%A0%90" target="_blank" rel="noreferrer" onclick="return openNaverMap(event)">
-        <div class="map-card-inner">
-          <div class="map-pin">⌖</div>
-          <strong>루이비스 강서</strong>
-          <p>탭하여 네이버 지도에서 보기</p>
-        </div>
-      </a>
+      <div class="map-card" id="map"></div>
+
+      <button type="button" class="map-sketch-btn" id="mapSketchBtn">약도 보기</button>
 
       <div class="location-detail">
         <h3>루이비스 강서</h3>
-        <p>서울특별시 강서구 양천로 476</p>
-        <p>1층 예식홀</p>
+        <p>서울 강서구 양천로 476 금부빌딩 8층</p>
       </div>
 
       <div class="map-buttons">
@@ -168,15 +147,23 @@
       <div class="traffic">
         <div>
           <strong>지하철</strong>
-          <p>9호선 가양역 9번 출구 도보 5분</p>
-        </div>
-        <div>
-          <strong>주차</strong>
-          <p>예식장 지하주차장 2시간 무료</p>
+          <p>9호선 가양역 9번 출구 (도보 1분)<br>금부빌딩 8층</p>
         </div>
         <div>
           <strong>버스</strong>
-          <p>가양역 정류장 하차 후 도보 3분</p>
+          <p>간선: 652, 672, 660<br>지선: 6632<br>광역: 7700<br>공항: 6008</p>
+          <p style="margin-top:6px;font-size:12px;color:var(--brown-soft);">
+            ※ 버스노선은 교통정책에 따라 변동될 수 있습니다.
+          </p>
+        </div>
+        <div>
+          <strong>자가용</strong>
+          <p><b>본관 주차장</b> (2시간 무료)<br>
+            <span style="font-size:13px;color:var(--brown-soft);">내비: "루이비스컨벤션 강서점"<br>또는 "양천로 476 금부빌딩"</span>
+          </p>
+          <p style="margin-top:8px;"><b>제2주차장</b> (3시간 무료)<br>
+            <span style="font-size:13px;color:var(--brown-soft);">내비: "가양 아벨테크노 지식산업센터"</span>
+          </p>
         </div>
       </div>
     </section>
@@ -184,33 +171,21 @@
     <section class="section account-section reveal">
       <p class="section-kicker">Account</p>
       <h2>마음 전하실 곳</h2>
-      <p class="muted">참석이 어려우신 분들을 위해 계좌번호를 기재했습니다.</p>
+      <p class="muted">마음만으로도 깊이 감사드리지만,<br>멀리서나마 축하를 전하고 싶으신 분들을 위해<br>마음 전하실 곳을 함께 안내드립니다.</p>
 
       <details>
         <summary>신랑측 계좌번호</summary>
         <div class="account-item">
-          <p>신한은행 110-123-456789 원종민</p>
-          <button type="button" data-copy="신한은행 110-123-456789 원종민">복사</button>
-        </div>
-        <div class="account-item">
-          <p>국민은행 123-45-678901 원용익</p>
-          <button type="button" data-copy="국민은행 123-45-678901 원용익">복사</button>
-        </div>
-        <div class="account-item">
-          <p>농협은행 456-78-901234 강수정</p>
-          <button type="button" data-copy="농협은행 456-78-901234 강수정">복사</button>
+          <p>신한은행 110-362-867784 원종민</p>
+          <button type="button" data-copy="신한은행 110-362-867784 원종민">복사</button>
         </div>
       </details>
 
       <details>
         <summary>신부측 계좌번호</summary>
         <div class="account-item">
-          <p>우리은행 356-0987-6543-21 최수연</p>
-          <button type="button" data-copy="우리은행 356-0987-6543-21 최수연">복사</button>
-        </div>
-        <div class="account-item">
-          <p>하나은행 1002-345-678910 박옥순</p>
-          <button type="button" data-copy="하나은행 1002-345-678910 박옥순">복사</button>
+          <p>신한은행 110-450-200257 최수연</p>
+          <button type="button" data-copy="신한은행 110-450-200257 최수연">복사</button>
         </div>
       </details>
     </section>
@@ -236,17 +211,11 @@
     </section>
 
     <footer class="footer">
-      <p>원종민 그리고 최수연</p>
-      <strong>2026. 10. 09</strong>
-      <span>Thank you for celebrating with us.</span>
+      <img src="./images/wedding-webp/last.webp" alt="" loading="lazy" />
     </footer>
   </main>
 
   <audio id="bgm" loop preload="none" data-src="./audio/bgm.mp3"></audio>
-
-  <button type="button" class="bgm-toggle" id="bgmToggle" aria-label="배경음악 토글" hidden>
-    <span class="bgm-icon" id="bgmIcon">♪</span>
-  </button>
 
   <div class="toast" id="toast">복사되었습니다.</div>
 
@@ -258,6 +227,7 @@
     <div class="modal-counter" id="modalCounter"></div>
   </div>
 
-  <script src="./script.js?v=13"></script>
+  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=87qbglwobp&submodules=geocoder"></script>
+  <script src="./script.js?v=24"></script>
 </body>
 </html>

@@ -101,6 +101,7 @@ function setModalImage(i) {
 
 function openModalAt(i) {
   lbIndex = i;
+  imageModal.classList.remove("single");
   modalImage.src = srcAt(i);
   if (modalCounter) {
     modalCounter.textContent =
@@ -115,6 +116,16 @@ function navModal(d) { setModalImage(lbIndex + d); }
 
 if (modalPrev) modalPrev.addEventListener("click", (e) => { e.stopPropagation(); navModal(-1); });
 if (modalNext) modalNext.addEventListener("click", (e) => { e.stopPropagation(); navModal(1); });
+
+const mapSketchBtn = document.getElementById("mapSketchBtn");
+if (mapSketchBtn) {
+  mapSketchBtn.addEventListener("click", () => {
+    imageModal.classList.add("single");
+    modalImage.src = "./images/map.jpg";
+    imageModal.classList.add("open");
+    imageModal.setAttribute("aria-hidden", "false");
+  });
+}
 
 document.addEventListener("keydown", (event) => {
   if (!imageModal.classList.contains("open")) return;
@@ -184,6 +195,7 @@ imageModal.addEventListener("touchend", (e) => {
 
 function closeModal() {
   imageModal.classList.remove("open");
+  imageModal.classList.remove("single");
   imageModal.setAttribute("aria-hidden", "true");
   modalImage.src = "";
 }
@@ -262,29 +274,28 @@ guestbookForm.addEventListener("submit", (event) => {
   showToast("메시지가 저장되었습니다.");
 });
 
-updateDday();
-window.setInterval(updateDday, 1000);
 renderMessages();
+
+(function showBgmNotice() {
+  const el = document.getElementById("bgmNotice");
+  if (!el) return;
+  setTimeout(() => el.classList.add("visible"), 600);
+  setTimeout(() => {
+    el.classList.remove("visible");
+    el.classList.add("dismissed");
+  }, 3600);
+  setTimeout(() => el.remove(), 4400);
+})();
 
 const VENUE = {
   name: "루이비스컨벤션 강서점",
-  lat: 37.5697,
-  lng: 126.8623,
+  address: "서울 강서구 양천로 476",
+  lat: 37.5611,
+  lng: 126.8546,
 };
 
 function isMobile() {
   return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-function openNaverMap(event) {
-  if (!isMobile()) return true;
-  event.preventDefault();
-  const name = encodeURIComponent(VENUE.name);
-  window.location.href = `nmap://search?query=${name}&appname=wedding`;
-  setTimeout(() => {
-    window.location.href = `https://map.naver.com/p/search/${name}`;
-  }, 1200);
-  return false;
 }
 
 function openTmap(event) {
@@ -301,13 +312,54 @@ function openTmap(event) {
   return false;
 }
 
-window.openNaverMap = openNaverMap;
 window.openTmap = openTmap;
+
+(function initNaverMap() {
+  if (typeof naver === "undefined" || !naver.maps) return;
+  const el = document.getElementById("map");
+  if (!el) return;
+
+  const fallback = new naver.maps.LatLng(VENUE.lat, VENUE.lng);
+  const map = new naver.maps.Map(el, {
+    center: fallback,
+    zoom: 17,
+    scrollWheel: true,
+    pinchZoom: true,
+    disableDoubleTapZoom: false,
+    zoomControl: true,
+    zoomControlOptions: {
+      style: naver.maps.ZoomControlStyle.SMALL,
+      position: naver.maps.Position.TOP_RIGHT,
+    },
+  });
+
+  const marker = new naver.maps.Marker({ position: fallback, map });
+  const info = new naver.maps.InfoWindow({
+    content: `<div style="padding:6px 10px;font-size:12px;font-weight:600;color:#332923;">${VENUE.name}</div>`,
+    borderWidth: 0,
+    backgroundColor: "#fff",
+    disableAnchor: false,
+    pixelOffset: new naver.maps.Point(0, -4),
+  });
+  info.open(map, marker);
+
+  if (naver.maps.Service && naver.maps.Service.geocode) {
+    naver.maps.Service.geocode({ query: VENUE.address }, (status, response) => {
+      if (status !== naver.maps.Service.Status.OK) return;
+      const items = response && response.v2 && response.v2.addresses;
+      if (!items || !items.length) return;
+      const it = items[0];
+      const ll = new naver.maps.LatLng(parseFloat(it.y), parseFloat(it.x));
+      map.setCenter(ll);
+      marker.setPosition(ll);
+      info.open(map, marker);
+    });
+  }
+})();
 
 (function initBgm() {
   const audio = document.getElementById("bgm");
   const btn = document.getElementById("bgmToggle");
-  const icon = document.getElementById("bgmIcon");
   if (!audio || !btn) return;
 
   const src = audio.dataset.src;
@@ -326,7 +378,6 @@ window.openTmap = openTmap;
     function setPlayingUI(playing) {
       btn.classList.toggle("playing", playing);
       btn.classList.toggle("muted", !playing);
-      icon.textContent = playing ? "♪" : "♪̸";
       btn.setAttribute("aria-label", playing ? "배경음악 끄기" : "배경음악 켜기");
     }
 
@@ -336,18 +387,6 @@ window.openTmap = openTmap;
         () => setPlayingUI(false)
       );
     }
-
-    tryPlay();
-
-    function autoStartOnce() {
-      if (audio.paused) tryPlay();
-      window.removeEventListener("pointerdown", autoStartOnce);
-      window.removeEventListener("touchstart", autoStartOnce);
-      window.removeEventListener("keydown", autoStartOnce);
-    }
-    window.addEventListener("pointerdown", autoStartOnce, { once: true });
-    window.addEventListener("touchstart", autoStartOnce, { once: true });
-    window.addEventListener("keydown", autoStartOnce, { once: true });
 
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
