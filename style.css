@@ -90,14 +90,20 @@ a {
   text-shadow: 0 2px 14px rgba(0,0,0,0.4);
 }
 
-.en-title,
-.section-kicker {
+.en-title {
   margin: 0 0 16px;
   color: var(--gold);
   font-family: Georgia, "Times New Roman", serif;
   font-size: 12px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
+}
+
+.section .section-kicker {
+  margin: 0 0 36px;
+  color: var(--gold);
+  font-size: 12.5px;
+  letter-spacing: 0.18em;
 }
 
 .cover-copy .en-title {
@@ -267,33 +273,35 @@ a {
   font-size: 20px;
 }
 
-.family-list {
-  display: grid;
-  gap: 12px;
+.parents {
+  margin-top: 64px;
 }
 
-.family-list div {
-  padding: 20px 18px;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: transparent;
+.parents p {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #4a4036;
 }
 
-.family-list p {
-  margin: 0 0 6px;
-  color: var(--gold);
+.parents p:last-child {
+  margin-bottom: 0;
+}
+
+.parents .rel {
+  margin: 0 6px;
+  color: var(--brown-soft);
   font-size: 13px;
 }
 
-.family-list strong {
-  font-weight: 500;
+.parents b {
+  font-weight: 700;
+  color: var(--brown);
 }
 
-.family-list span {
-  display: block;
-  margin-top: 4px;
+.parents .late {
+  margin-right: 3px;
   color: var(--brown-soft);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .time-text {
@@ -351,19 +359,13 @@ a {
 }
 
 .days .wedding-day {
-  position: relative;
+  width: 28px;
+  height: 28px;
+  place-self: center;
   border-radius: 50%;
   background: var(--brown);
   color: #fff;
   font-weight: 700;
-}
-
-.days .wedding-day::after {
-  content: "♥";
-  position: absolute;
-  top: -17px;
-  color: var(--gold);
-  font-size: 12px;
 }
 
 .d-day-box {
