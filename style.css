@@ -562,18 +562,19 @@ a {
 
 .map-btn {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 6px;
   width: 100%;
   padding: 11px 6px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 10px;
   background: transparent;
   color: var(--brown);
   text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 0.02em;
+  font-size: 12px;
+  letter-spacing: 0;
   cursor: pointer;
 }
 
@@ -581,20 +582,18 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 700;
-  font-size: 13px;
-  color: #fff;
   flex-shrink: 0;
 }
 
-.map-btn .map-btn-badge {
-  background: transparent;
-  color: var(--brown);
-  border: 1px solid var(--line);
+.map-btn-badge svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.map-btn-label {
+  white-space: nowrap;
 }
 
 .map-btn:active {
