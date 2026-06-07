@@ -160,12 +160,17 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") navModal(1);
 });
 
-let touchStartX = 0, touchStartY = 0;
+let touchStartX = 0, touchStartY = 0, touchTracking = false;
 imageModal.addEventListener("touchstart", (e) => {
   const t = e.changedTouches[0];
   touchStartX = t.clientX; touchStartY = t.clientY;
+  touchTracking = true;
 }, { passive: true });
 imageModal.addEventListener("touchend", (e) => {
+  // Ignore touchend whose touchstart didn't begin on the modal
+  // (e.g. the tap that opened the lightbox lifts over the modal).
+  if (!touchTracking) return;
+  touchTracking = false;
   const t = e.changedTouches[0];
   const dx = t.clientX - touchStartX;
   const dy = t.clientY - touchStartY;
