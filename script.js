@@ -61,15 +61,11 @@ const imageModal = document.getElementById("imageModal");
 let modalImage = document.getElementById("modalImage");
 const modalClose = document.getElementById("modalClose");
 
-const GALLERY_PHOTOS = [
-  "0.webp", "1.webp", "2.webp", "3.webp",
-  "3-1.webp", "3-1-1.webp", "3-1-1-1.webp",
-  "4.webp", "5.webp", "6.webp", "7.webp", "8.webp", "9.webp",
-  "10.webp", "11.webp", "12.webp", "13.webp", "14.webp",
-  "15.webp", "16.webp", "17.webp", "18.webp", "19.webp", "20.webp",
-  "21.webp", "22.webp", "23.webp", "24.webp", "25.webp", "26.webp",
-  "27.webp",
-];
+const GALLERY_PHOTOS = Array.from({ length: 31 }, (_, i) => i + ".webp");
+
+// 그리드 = 가벼운 썸네일, 확대(라이트박스) = 고해상도 풀 이미지
+const THUMB_DIR = "./images/wedding-thumb/";
+const FULL_DIR = "./images/wedding-full/";
 
 let lbIndex = 0;
 const modalCounter = document.getElementById("modalCounter");
@@ -77,7 +73,7 @@ const modalPrev = document.getElementById("modalPrev");
 const modalNext = document.getElementById("modalNext");
 
 function srcAt(i) {
-  return "./images/wedding-webp/" + encodeURI(GALLERY_PHOTOS[i]);
+  return FULL_DIR + encodeURI(GALLERY_PHOTOS[i]);
 }
 
 const _imgCache = {};
@@ -187,7 +183,7 @@ imageModal.addEventListener("touchend", (e) => {
   const INITIAL = 12;
 
   function makeItem(name, i) {
-    const src = "./images/wedding-webp/" + encodeURI(name);
+    const src = THUMB_DIR + encodeURI(name);
     const btn = document.createElement("button");
     btn.className = "gallery-photo";
     btn.type = "button";
