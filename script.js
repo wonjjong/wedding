@@ -157,7 +157,14 @@ document.addEventListener("keydown", (event) => {
 });
 
 let touchStartX = 0, touchStartY = 0, touchTracking = false;
+function isZoomed() {
+  // 핀치로 페이지가 확대된 상태(visualViewport.scale > 1)에서는
+  // 한 손가락 드래그가 스와이프가 아니라 패닝이므로 네비게이션을 막는다.
+  return !!(window.visualViewport && window.visualViewport.scale > 1.01);
+}
 imageModal.addEventListener("touchstart", (e) => {
+  // 두 손가락 이상(핀치 줌)은 스와이프가 아니므로 추적하지 않는다.
+  if (e.touches.length > 1) { touchTracking = false; return; }
   const t = e.changedTouches[0];
   touchStartX = t.clientX; touchStartY = t.clientY;
   touchTracking = true;
@@ -167,6 +174,8 @@ imageModal.addEventListener("touchend", (e) => {
   // (e.g. the tap that opened the lightbox lifts over the modal).
   if (!touchTracking) return;
   touchTracking = false;
+  // 아직 다른 손가락이 남아있거나(핀치 중 한 손가락만 뗌), 줌인 상태면 무시.
+  if (e.touches.length > 0 || isZoomed()) return;
   const t = e.changedTouches[0];
   const dx = t.clientX - touchStartX;
   const dy = t.clientY - touchStartY;
