@@ -681,7 +681,29 @@ a {
 
 .account-item p {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--brown);
+}
+
+.account-rel {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(169, 129, 104, 0.12);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+
+.account-bank {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--brown-soft);
 }
 
 .account-item button {
