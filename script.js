@@ -247,6 +247,34 @@ document.addEventListener("keydown", (event) => {
 });
 
 // ============================================================
+// 연락하기: 웹은 중앙 모달, 모바일은 바텀시트(CSS 미디어쿼리로 분기)
+// ============================================================
+const contactModal = document.getElementById("contactModal");
+const contactOpen = document.getElementById("contactOpen");
+const contactClose = document.getElementById("contactClose");
+const contactBackdrop = document.getElementById("contactBackdrop");
+
+function openContact() {
+  contactModal.classList.add("open");
+  contactModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeContact() {
+  contactModal.classList.remove("open");
+  contactModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+if (contactOpen) contactOpen.addEventListener("click", openContact);
+if (contactClose) contactClose.addEventListener("click", closeContact);
+if (contactBackdrop) contactBackdrop.addEventListener("click", closeContact);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && contactModal.classList.contains("open")) closeContact();
+});
+
+// ============================================================
 // 방명록: Google Apps Script Web App URL 을 GAS_URL 에 채워넣으면
 // 원격(스프레드시트) 저장으로 자동 전환. 비어 있으면 localStorage 폴백.
 // ============================================================
