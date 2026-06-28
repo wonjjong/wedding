@@ -774,10 +774,16 @@ a {
 .guestbook-message .gb-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 4px;
   gap: 8px;
-  padding-right: 26px;
+}
+
+.guestbook-message .gb-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .guestbook-message strong {
@@ -802,11 +808,11 @@ a {
 }
 
 .guestbook-message .gb-del {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
   padding: 0;
   border: none;
   background: transparent;

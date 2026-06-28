@@ -372,15 +372,12 @@ async function renderMessages() {
       const name = document.createElement("strong");
       name.textContent = m.name || "";
 
+      const meta = document.createElement("div");
+      meta.className = "gb-meta";
+
       const dt = document.createElement("span");
       dt.className = "gb-date";
       dt.textContent = m.ts ? formatGbDate(m.ts) : "";
-
-      top.appendChild(name);
-      top.appendChild(dt);
-
-      const text = document.createElement("p");
-      text.textContent = m.message || m.text || "";
 
       const del = document.createElement("button");
       del.type = "button";
@@ -389,7 +386,15 @@ async function renderMessages() {
       del.textContent = "×";
       del.addEventListener("click", () => deleteMessage(m));
 
-      item.appendChild(del);
+      meta.appendChild(dt);
+      meta.appendChild(del);
+
+      top.appendChild(name);
+      top.appendChild(meta);
+
+      const text = document.createElement("p");
+      text.textContent = m.message || m.text || "";
+
       item.appendChild(top);
       item.appendChild(text);
       guestbookList.appendChild(item);
