@@ -435,8 +435,8 @@ guestbookForm.addEventListener("submit", async (event) => {
   const message = messageInput.value.trim();
   const pw = pwInput ? pwInput.value : "";
 
-  if (!name || !message) {
-    showToast("이름과 메시지를 입력해주세요.");
+  if (!name || !message || !pw) {
+    showToast("이름, 비밀번호, 메시지를 모두 입력해주세요.");
     return;
   }
 
