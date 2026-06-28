@@ -777,6 +777,7 @@ a {
   align-items: baseline;
   margin-bottom: 4px;
   gap: 8px;
+  padding-right: 26px;
 }
 
 .guestbook-message strong {
