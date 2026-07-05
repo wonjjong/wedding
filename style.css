@@ -25,6 +25,7 @@ body {
   background: #f3f5f2;
   color: var(--brown);
   font-family: "NanumSquareNeo", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+  font-size: 16px;
   line-height: 1.75;
 }
 
@@ -135,7 +136,7 @@ a {
   margin: 0;
   color: rgba(255,255,255,0.92);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.18em;
 }
 
@@ -355,7 +356,7 @@ a {
   justify-content: center;
   height: 34px;
   color: #5f524b;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .days .wedding-day {
@@ -531,7 +532,7 @@ a {
 
 .map-card p {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .location-detail {
@@ -612,7 +613,7 @@ a {
   color: #fffaf6;
   text-align: center;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -639,12 +640,12 @@ a {
   display: block;
   margin-bottom: 4px;
   color: var(--gold);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .traffic p {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .account-section {
@@ -653,7 +654,7 @@ a {
 
 .muted {
   color: var(--brown-soft) !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
 }
 
 .account-section details {
@@ -681,7 +682,7 @@ a {
 
 .account-item p {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--brown);
 }
@@ -741,13 +742,13 @@ a {
 .guestbook-form input {
   height: 44px;
   padding: 0 14px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .guestbook-form textarea {
   min-height: 96px;
   padding: 12px 14px;
-  font-size: 14px;
+  font-size: 16px;
   resize: vertical;
 }
 
@@ -788,7 +789,7 @@ a {
 
 .guestbook-message strong {
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--brown);
 }
 
@@ -801,7 +802,7 @@ a {
 
 .guestbook-message p {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   color: #4a4036;
   white-space: pre-wrap;
   word-break: break-word;
@@ -929,7 +930,7 @@ a {
   background: rgba(51, 41, 35, 0.94);
   color: #fff;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   opacity: 0;
   pointer-events: none;
   transition: all 0.25s ease;
