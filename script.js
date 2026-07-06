@@ -278,7 +278,7 @@ document.addEventListener("keydown", (event) => {
 // 방명록: Google Apps Script Web App URL 을 GAS_URL 에 채워넣으면
 // 원격(스프레드시트) 저장으로 자동 전환. 비어 있으면 localStorage 폴백.
 // ============================================================
-const GAS_URL = "";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxVoN7jocEckl1bGG4uZ2ZjMrme_er9SQ5LHDQnoHXz0XKZdUQDxXSPZOfdq8U_o5KoRA/exec";
 
 const guestbookForm = document.getElementById("guestbookForm");
 const guestbookList = document.getElementById("guestbookList");
