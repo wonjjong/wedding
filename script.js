@@ -323,6 +323,9 @@ const remoteStore = {
 
 const guestStore = GAS_URL ? remoteStore : localStore;
 
+// 원격 저장으로 전환됐으므로 과거 로컬 모드 시절 남은 데이터는 정리
+if (GAS_URL) localStorage.removeItem(localStore.key);
+
 async function sha256(text) {
   const buf = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest("SHA-256", buf);
